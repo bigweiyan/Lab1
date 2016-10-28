@@ -1,4 +1,4 @@
-﻿package com.se.lab;
+package com.se.lab;
 
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class Polynomial {
     private static ArrayList<Monomial> poly;
 
     /**
-     * 此处应该有注释.
+     * 主方法，程序入口.
      *
      * @param args args需注释
      */
@@ -478,7 +478,7 @@ public class Polynomial {
 }
 
 /**
- * 此处应该有注释.
+ * 单项式类，封装了系数和变量.
  */
 class Monomial {
     /**
