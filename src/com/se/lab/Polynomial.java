@@ -8,25 +8,15 @@ import java.util.Scanner;
 //import java.io.*;
 
 /**
- * 此处应该有注释.
+ * 多项式类<br>
+ * 封装了一些多项式方法，如解析、合并、求导、求值。并包含了主方法
  */
 public class Polynomial {
+
     /**
-     * 此处应该有注释.
+     * 多项式（单项式列表）.
      */
-    public static final int THREE = 3;
-    /**
-     * 此处应该有注释.
-     */
-    public static final int EIGHT = 8;
-    /**
-     * 此处应该有注释.
-     */
-    public static final int TEN = 10;
-    /**
-     * 此处应该有注释.
-     */
-    /* default */static ArrayList<Monomial> poly;
+    private static ArrayList<Monomial> poly;
 
     /**
      * 此处应该有注释.
@@ -88,7 +78,7 @@ public class Polynomial {
     /**
      * 解析命令并调用化简和求导函数.
      *
-     * @param longs1 s1需注释
+     * @param longs1 命令
      */
     public static void command(final String longs1) {
         String longs = longs1;
@@ -97,13 +87,13 @@ public class Polynomial {
 
         if (longs.startsWith("d/d")) {
             iscommand = true;
-            longs = longs.substring(THREE).trim();
+            longs = longs.substring(3).trim();
             derivative(poly, longs);
         } else {
             HashMap<String, Float> map = new HashMap<String, Float>();
             iscommand = true;
             if (longs.startsWith("simplify")) {
-                longs = longs.substring(EIGHT).trim();
+                longs = longs.substring(8).trim();
                 while (!longs.equals("")) {
                     int spacepos = longs.indexOf(' ');
                     if (spacepos == -1) {
@@ -167,12 +157,12 @@ public class Polynomial {
      * @return 多项式
      */
     public static ArrayList<Monomial> expression(final String longs) {
-        final int iNPUTNUM = 0;
-        final int iNPUTVAR = 1;
-        final int iNPUTMUL = 2;
-        final int iNPUTNEW = 3;
-        final int iNPUTPOW = 4;
-        int state = iNPUTNEW;
+        final int INPUTNUM = 0;
+        final int INPUTVAR = 1;
+        final int INPUTMUL = 2;
+        final int INPUTNEW = 3;
+        final int INPUTPOW = 4;
+        int state = INPUTNEW;
         int tempnum = 0;
         String tempvar = "";
         Monomial mono = new Monomial();
@@ -190,20 +180,20 @@ public class Polynomial {
                 continue;
             }
             switch (state) {
-                case iNPUTNUM:
+                case INPUTNUM:
                     if (longch == '*') {
                         mono.longk *= tempnum;
                         tempnum = 0;
-                        state = iNPUTMUL;
+                        state = INPUTMUL;
                     } else if (longch >= '0' && longch <= '9') {
-                        tempnum = tempnum * TEN + (longch - '0');
+                        tempnum = tempnum * 10 + (longch - '0');
                     } else if (longch == '+' || longch == '-') {
                         mono.longk *= tempnum;
                         tempvar = "";
                         tempnum = 0;
                         poly.add(mono);
                         mono = new Monomial();
-                        state = iNPUTNEW;
+                        state = INPUTNEW;
                         if (longch == '-') {
                             mono.longk *= -1;
                         }
@@ -212,13 +202,13 @@ public class Polynomial {
                         mono.longk *= tempnum;
                         tempnum = 0;
                         tempvar = longch + "";
-                        state = iNPUTVAR;
+                        state = INPUTVAR;
                     } else {
                         System.out.println("Syntax error!");
                         return null;
                     }
                     break;
-                case iNPUTVAR:
+                case INPUTVAR:
                     if (longch >= 'a' && longch <= 'z' || longch >= 'A' && longch <= 'Z') {
                         tempvar += longch;
                     } else if (longch == '+' || longch == '-') {
@@ -232,7 +222,7 @@ public class Polynomial {
                         tempnum = 0;
                         poly.add(mono);
                         mono = new Monomial();
-                        state = iNPUTNEW;
+                        state = INPUTNEW;
                         if (longch == '-') {
                             mono.longk *= -1;
                         }
@@ -244,41 +234,41 @@ public class Polynomial {
                             mono.variable.put(tempvar, 1);
                         }
                         tempvar = "";
-                        state = iNPUTMUL;
+                        state = INPUTMUL;
                     } else if (longch == '^') {
-                        state = iNPUTPOW;
+                        state = INPUTPOW;
                     } else {
                         System.out.println("Syntax error!");
                         return null;
                     }
                     break;
-                case iNPUTMUL:
+                case INPUTMUL:
                     if (longch >= '0' && longch <= '9') {
                         tempnum = longch - '0';
-                        state = iNPUTNUM;
+                        state = INPUTNUM;
                     } else if (longch >= 'a' && longch <= 'z'
                             || longch >= 'A' && longch <= 'Z') {
                         tempvar = "" + longch;
-                        state = iNPUTVAR;
+                        state = INPUTVAR;
                     } else {
                         System.out.println("Syntax error!");
                         return null;
                     }
                     break;
-                case iNPUTNEW:
+                case INPUTNEW:
                     if (longch >= '0' && longch <= '9') {
-                        tempnum = tempnum * TEN + (longch - '0');
-                        state = iNPUTNUM;
+                        tempnum = tempnum * 10 + (longch - '0');
+                        state = INPUTNUM;
                     } else if (longch >= 'a' && longch <= 'z'
                             || longch >= 'A' && longch <= 'Z') {
                         tempvar += longch;
-                        state = iNPUTVAR;
+                        state = INPUTVAR;
                     } else {
                         System.out.println("Syntax error!");
                         return null;
                     }
                     break;
-                case iNPUTPOW:
+                case INPUTPOW:
                     if (longch == '*' || longch == '+' || longch == '-') {
                         if (tempnum == 0) {
                             System.out.println("Syntax error!");
@@ -291,20 +281,20 @@ public class Polynomial {
                         if (longch == '*') {
                             tempvar = "";
                             tempnum = 0;
-                            state = iNPUTMUL;
+                            state = INPUTMUL;
 
                         } else {
                             tempvar = "";
                             tempnum = 0;
                             poly.add(mono);
                             mono = new Monomial();
-                            state = iNPUTNEW;
+                            state = INPUTNEW;
                             if (longch == '-') {
                                 mono.longk *= -1;
                             }
                         }
                     } else if (longch >= '0' && longch <= '9') {
-                        tempnum = tempnum * TEN + (longch - '0');
+                        tempnum = tempnum * 10 + (longch - '0');
                     } else {
                         System.out.println("Syntax error!");
                         return null;
@@ -315,11 +305,11 @@ public class Polynomial {
             }
         }
         switch (state) {
-            case iNPUTNEW:
-            case iNPUTMUL:
+            case INPUTNEW:
+            case INPUTMUL:
                 System.out.println("Syntax error!");
                 return null;
-            case iNPUTVAR:
+            case INPUTVAR:
                 if (mono.variable.containsKey(tempvar)) {
                     mono.variable.put(tempvar,
                             mono.variable.get(tempvar) + 1);
@@ -327,10 +317,10 @@ public class Polynomial {
                     mono.variable.put(tempvar, 1);
                 }
                 break;
-            case iNPUTNUM:
+            case INPUTNUM:
                 mono.longk *= tempnum;
                 break;
-            case iNPUTPOW:
+            case INPUTPOW:
                 if (tempnum == 0) {
                     System.out.println("Syntax error!");
                     return null;
@@ -492,16 +482,16 @@ public class Polynomial {
  */
 class Monomial {
     /**
-     * 此处应该有注释.
+     * 系数.
      */
-    /* default */float longk; //系数
+    float longk; 
     /**
-     * 此处应该有注释.
+     * 变量及其次数.
      */
-    /* default */HashMap<String, Integer> variable; //变量及其次数
+    /* default */HashMap<String, Integer> variable; 
 
     /**
-     * 此处应该有注释.
+     * 初始化多项式：为1.
      */
     Monomial() {
         longk = 1;
@@ -509,9 +499,9 @@ class Monomial {
     }
 
     /**
-     * 此处应该有注释.
+     * 复制构造函数.
      *
-     * @param mono mono需注释
+     * @param mono 被复制的单项式
      */
     Monomial(final Monomial mono) {
         longk = mono.longk;
@@ -519,5 +509,3 @@ class Monomial {
     }
 
 }
-
-// this is a line which do nothing
