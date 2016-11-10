@@ -17,6 +17,14 @@ public class Polynomial {
      * 多项式（单项式列表）.
      */
     private static ArrayList<Monomial> poly;
+    
+    public static void setPoly(ArrayList<Monomial> thePoly) {
+    	poly = thePoly;
+    }
+    
+    public static ArrayList<Monomial> getPoly() {
+    	return poly;
+    }
 
     /**
      * 主方法，程序入口.
@@ -47,7 +55,7 @@ public class Polynomial {
                 stay = false;
             } else if (line.charAt(0) == '!') {
                 //long startTime = System.currentTimeMillis();
-                command(line);
+                System.out.println(command(line));
                 //long endTime = System.currentTimeMillis();
 
                 //System.out.println("Command StartTime = " + startTime);
@@ -80,15 +88,15 @@ public class Polynomial {
      *
      * @param longs1 命令
      */
-    public static void command(final String longs1) {
+    public static String command(final String longs1) {
         String longs = longs1;
         longs = longs.substring(1).trim();
         boolean iscommand = false;
 
-        if (longs.startsWith("d/d")) {
+        if (longs.startsWith("d/d ")) {
             iscommand = true;
-            longs = longs.substring(3).trim();
-            derivative(poly, longs);
+            longs = longs.substring(4).trim();
+            return derivative(poly, longs);
         } else {
             HashMap<String, Float> map = new HashMap<String, Float>();
             iscommand = true;
@@ -124,8 +132,7 @@ public class Polynomial {
                         try {
                             longa = Float.parseFloat(value);
                         } catch (NumberFormatException e) {
-                            System.out.println("Command ERROR!");
-                            return;
+                            return "Command ERROR!";
                         }
                         map.put(var, longa);
                         if (spacepos == longs.length()) {
@@ -143,9 +150,9 @@ public class Polynomial {
             }
 
             if (iscommand) {
-                simplify(poly, map);
+                return simplify(poly, map);
             } else {
-                System.out.println("Command ERROR!");
+                return "Command ERROR!";
             }
         }
     }
@@ -334,7 +341,7 @@ public class Polynomial {
         }
         poly.add(mono);
         poly = merge(poly);
-        printPoly(poly);
+        System.out.println(printPoly(poly));
         return poly;
     }
 
@@ -344,7 +351,7 @@ public class Polynomial {
      * @param poly 多项式
      * @param map  代入的变量及其值
      */
-    public static void simplify(
+    public static String simplify(
             final List<Monomial> poly, final HashMap<String, Float> map) {
         ArrayList<Monomial> newpoly = new ArrayList<Monomial>();
 
@@ -369,11 +376,10 @@ public class Polynomial {
                 }
             }
             if (!appear) {
-                System.out.println("Variable not found!");
-                return;
+                return "Variable not found!";
             }
         }
-        printPoly(newpoly);
+        return printPoly(newpoly);
     }
 
     /**
@@ -382,9 +388,18 @@ public class Polynomial {
      * @param poly     多项式
      * @param variable 求导变量
      */
-    public static void derivative(final ArrayList<Monomial> poly,
+    public static String derivative(final ArrayList<Monomial> poly,
                                   final String variable) {
-        //copy the arraylist
+        if (poly == null) {
+        	return "Command ERROR!";
+        }
+        for (int i = 0; i < variable.length(); i++){
+        	char ch = variable.charAt(i);
+        	if (ch < 'a' || ch > 'z') {
+        		return "Command ERROR!";
+        	}
+        }
+    	//copy the arraylist
         boolean variableappear = false;
         ArrayList<Monomial> newpoly = new ArrayList<Monomial>();
         for (Monomial i : poly) {
@@ -410,9 +425,9 @@ public class Polynomial {
             }
         }
         if (variableappear) {
-            printPoly(newpoly);
+            return printPoly(newpoly);
         } else {
-            System.out.println("Variable not found!");
+            return "Variable not found!";
         }
     }
 
@@ -421,33 +436,39 @@ public class Polynomial {
      *
      * @param poly1 多项式
      */
-    public static void printPoly(final ArrayList<Monomial> poly1) {
+    public static String printPoly(final ArrayList<Monomial> poly1) {
         ArrayList<Monomial> poly = poly1;
         poly = merge(poly);
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < poly.size(); i++) {
             Monomial mono = poly.get(i);
             if (mono.longk > 0 && i > 0) {
-                System.out.print('+');
+                //System.out.print('+');
+                sb.append('+');
             }
             boolean flag = false;
             if (mono.longk != 1 || mono.variable.isEmpty()) {
                 if (mono.longk - (int) mono.longk == 0) {
-                    System.out.print((int) mono.longk);
+                    //System.out.print((int) mono.longk);
+                    sb.append((int) mono.longk);
                 } else {
-                    System.out.print(mono.longk);
+                    //System.out.print(mono.longk);
+                    sb.append(mono.longk);
                 }
                 flag = true;
             }
             for (HashMap.Entry<String, Integer> entry
                     : mono.variable.entrySet()) {
-                System.out.print((flag ? '*' : "") + entry.getKey());
+                //System.out.print();
+                sb.append((flag ? '*' : "") + entry.getKey());
                 flag = true;
                 if (entry.getValue() != 1) {
-                    System.out.print('^' + "" + entry.getValue());
+                    //System.out.print('^' + "" + entry.getValue());
+                    sb.append('^' + "" + entry.getValue());
                 }
             }
         }
-        System.out.println();
+        return sb.toString();
     }
 
     /**
