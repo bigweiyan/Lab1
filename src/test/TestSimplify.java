@@ -1,4 +1,4 @@
-package com.se.lab;
+package test;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.Test;
+
+import com.se.lab.Monomial;
+import com.se.lab.Polynomial;
 
 public class TestSimplify {
 	@Test
