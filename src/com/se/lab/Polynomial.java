@@ -13,12 +13,12 @@ public class Polynomial {
      */
     private ArrayList<Monomial> monoList;
     
-    Polynomial()
+    public Polynomial()
     {
     	monoList = new ArrayList<Monomial>();
     }
     
-    Polynomial(Polynomial poly)
+    public Polynomial(Polynomial poly)
     {
     	monoList = new ArrayList<Monomial>(poly.monoList);
     }

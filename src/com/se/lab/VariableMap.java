@@ -6,12 +6,12 @@ import java.util.Set;
 public class VariableMap {
 	private HashMap<String, Integer> map;
 	
-	VariableMap()
+	public VariableMap()
 	{
 		map = new HashMap<String, Integer>();
 	}
 	
-	VariableMap(VariableMap variableMap)
+	public VariableMap(VariableMap variableMap)
 	{
 		map = new HashMap<String, Integer>(variableMap.map);
 	}

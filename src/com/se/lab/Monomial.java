@@ -16,7 +16,7 @@ public class Monomial {
     /**
      * 初始化多项式：为1.
      */
-    Monomial() {
+    public Monomial() {
         coefficient = 1;
         variable = new VariableMap();
     }
@@ -25,7 +25,7 @@ public class Monomial {
      * 复制构造函数.
      * @param mono 被复制的单项式
      */
-    Monomial(final Monomial mono) {
+    public Monomial(final Monomial mono) {
         coefficient = mono.coefficient;
         variable = new VariableMap(mono.variable);
     }
